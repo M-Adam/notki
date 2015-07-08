@@ -9,5 +9,7 @@ namespace Notki
     class Notatka
     {
         private int id;
+        public string Wiadomosc;
+
     }
 }
