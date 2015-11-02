@@ -1,61 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Notki
 {
     public partial class Form1 : Form
     {
-        private string sciezkaDoNotatek;
-        
+        private string pathToNotes;
+        private Note loadedNote;
+        private List<string> names;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        
-
         private void Form1_Load(object sender, EventArgs e)
         {
-            string mojeDokumenty = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            sciezkaDoNotatek = mojeDokumenty + "\\Notatki.net";
-            if (Directory.Exists(sciezkaDoNotatek))
-            {
-               // listBox1.DataSource = Directory.GetFiles(sciezkaDoNotatek, "*.dat");
-                var listaSciezek = Directory.GetFiles(sciezkaDoNotatek, "*.dat").ToList();
-                List<string> listaNazw = new List<string>();
-                foreach (var sciezka in listaSciezek)
-                    listaNazw.Add(Path.GetFileNameWithoutExtension(sciezka));
-                listBox1.DataSource = listaNazw;
+            string myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            pathToNotes = myDocumentsPath + "\\Notatki.net";
 
+            if (Directory.Exists(pathToNotes))
+            {
+                reloadControls();
             }
             else
             {
-                Directory.CreateDirectory(sciezkaDoNotatek);
-                MessageBox.Show("Nie znaleziono folderu z notatkami, utworzono nowy:\n" + sciezkaDoNotatek,
+                Directory.CreateDirectory(pathToNotes);
+                MessageBox.Show("Nie znaleziono folderu z notatkami, utworzono nowy:\n" + pathToNotes,
                     "Nowy folder", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        
+
+        private void reloadControls()
+        {
+            List<string> paths = Directory.GetFiles(pathToNotes, "*.dat").ToList();
+            names = new List<string>();
+            names.Clear();
+
+            foreach (var sciezka in paths)
+                names.Add(Path.GetFileNameWithoutExtension(sciezka));
+
+            listBox1.DataSource = names;
+            toolStripStatusLabel1.Text = "Notatek: " + listBox1.Items.Count;
+            checkQuantityOfListboxItems();
+        }
+
+        private void checkQuantityOfListboxItems()
+        {
+            if (listBox1.Items.Count != 0) return;
+
+            buttonSaveChanges.Enabled = false;
+            buttonUsunNotatke.Enabled = false;
+            textBoxTitle.Text = "";
+            textBoxText.Text = "";
+        }
 
         private void buttonNew_Click(object sender, EventArgs e)
         {
-            new Nowa(sciezkaDoNotatek).Show();
+            new NewNote(pathToNotes).Show();
         }
 
         private void Form1_Activated(object sender, EventArgs e)
         {
-            
-            listBox1.Refresh();
+            reloadControls();
         }
 
         private void buttonKoniec_Click(object sender, EventArgs e)
@@ -65,29 +76,17 @@ namespace Notki
 
         private void textBoxTytul_TextChanged(object sender, EventArgs e)
         {
-            buttonZapiszZmiany.Enabled = true;
+            buttonSaveChanges.Enabled = true;
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var wybrany_item = listBox1.SelectedItem;
-           
-            if (buttonZapiszZmiany.Enabled)
-            {
-                var decyzja = MessageBox.Show("Czy chcesz porzucić zmiany", "Zapis", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                if (decyzja == DialogResult.No)
-                {
-                    listBox1.SelectedItem = wybrany_item;
-                    return;
-                }
-            }
-
             buttonUsunNotatke.Enabled = true;
 
-            Notatka zaladowanaNotatka = Notatka.WczytajNotatke(sciezkaDoNotatek+"\\"+listBox1.SelectedItem.ToString()+".dat");
-            textBoxTytul.Text = zaladowanaNotatka.Tytul;
-            textBoxTresc.Text = zaladowanaNotatka.Wiadomosc;
-            switch (zaladowanaNotatka.Waznosc)
+            loadedNote = Note.LoadNote(pathToNotes+"\\"+listBox1.SelectedItem.ToString()+".dat");
+            textBoxTitle.Text = loadedNote.Title;
+            textBoxText.Text = loadedNote.Text;
+            switch (loadedNote.Priority)
             {
                 case 1:
                     radioButton1.Checked = true;
@@ -108,11 +107,55 @@ namespace Notki
                     radioButton5.Checked = true;
                     break;
             }
-            buttonZapiszZmiany.Enabled = false;
-
-
+            buttonSaveChanges.Enabled = false;
         }
 
-        
+        private void buttonSaveChanges_Click(object sender, EventArgs e)
+        {
+            string noteToSave=pathToNotes+"\\"+listBox1.SelectedItem+".dat";
+
+            Note newNote = new Note()
+            {
+                DateOfCreation = loadedNote.DateOfCreation,
+                Priority = getPriority(),
+                Text = textBoxText.Text,
+                Title = textBoxTitle.Text,
+                DateOfModification = DateTime.Now
+            };
+
+            if (!Note.SaveChanges(noteToSave, pathToNotes, newNote))
+                return;
+
+            buttonSaveChanges.Enabled = false;
+
+            reloadControls();
+        }
+
+        private byte getPriority()
+        {
+            if (radioButton1.Checked) return 1;
+            if (radioButton2.Checked) return 2;
+            if (radioButton3.Checked) return 3;
+            if (radioButton4.Checked) return 4;
+            return 5;
+        }
+
+        private void OpenInExplorerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(pathToNotes);
+        }
+
+        private void deleteNoteButton_Click(object sender, EventArgs e)
+        {
+            DialogResult decision = MessageBox.Show("Czy na pewno?", "Pytanie", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk);
+            if(decision==DialogResult.No) return;
+            
+            string noteToDelete = pathToNotes + "\\" + listBox1.SelectedItem + ".dat";
+
+            if (!Note.DeleteNote(noteToDelete))
+                return;
+
+            reloadControls();
+        }
     }
 }

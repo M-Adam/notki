@@ -1,50 +1,45 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Notki
 {
     [Serializable]
-    class Notatka:IComparable<Notatka>
+    class Note:IComparable<Note>
     {
-        public string Tytul { get; set; }
-        public string Wiadomosc { get; set; }
-        public byte Waznosc { get; set; }
-        public DateTime DataUtworzenia { get; set; }
-        public DateTime? DataModyfikacji { get; set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
+        public byte Priority { get; set; }
+        public DateTime DateOfCreation { get; set; }
+        public DateTime? DateOfModification { get; set; }
 
-        public int CompareTo(Notatka innaNotatka)
+        public int CompareTo(Note otherNote)
         {
-            if (this.DataUtworzenia > innaNotatka.DataUtworzenia) return 1;
-            if (this.DataUtworzenia == innaNotatka.DataUtworzenia) return 0;
+            if (this.DateOfCreation > otherNote.DateOfCreation) return 1;
+            if (this.DateOfCreation == otherNote.DateOfCreation) return 0;
             else return -1;
         }
 
         public override string ToString()
         {
-            return this.Tytul;
+            return this.Title;
         }
 
-        public static bool UtworzNowyPlikSerializuj(Notatka nowaNotatka, string sciezka)
+        public static bool CreateNewAndSerialize(Note newNote, string destPath)
         {
             IFormatter formatter = new BinaryFormatter();
 
-            string nazwaPliku = nowaNotatka.Tytul + ".dat";
-            MessageBox.Show(sciezka + "\\" + nazwaPliku);
-            if (File.Exists(sciezka+"\\"+nazwaPliku))
+            string fileName = newNote.Title + ".dat";
+            
+            if (File.Exists(destPath+"\\"+fileName))
                 return false;
 
             try
             {
-                using (Stream strim = File.Create(sciezka + "\\" + nazwaPliku))
-                    formatter.Serialize(strim, nowaNotatka);
+                using (Stream str = File.Create(destPath + "\\" + fileName))
+                    formatter.Serialize(str, newNote);
             }
             catch (Exception e)
             {
@@ -55,16 +50,16 @@ namespace Notki
             return true;
         }
 
-        public static Notatka WczytajNotatke(string notatkaDoWczytania_sciezka)
+        public static Note LoadNote(string pathToNote)
         {
-            Notatka przywroconaNotatka;
+            Note loadedNote;
             IFormatter formatter = new BinaryFormatter();
 
             try
             {
-                using (Stream strim = File.OpenRead(notatkaDoWczytania_sciezka))
+                using (Stream str = File.OpenRead(pathToNote))
                 {
-                    przywroconaNotatka = (Notatka) formatter.Deserialize(strim);
+                    loadedNote = (Note) formatter.Deserialize(str);
                 }
             }
             catch (Exception e)
@@ -73,13 +68,41 @@ namespace Notki
                 return null;
             }
 
-            return przywroconaNotatka;
+            return loadedNote;
         }
 
-        public static bool ZapiszZmiany(string notatkaDoZapisania_sciezka, Notatka notatkaDoZapisania)
+        public static bool SaveChanges(string noteToOverwrite, string sciezkaDoFolderuZNotatkami, Note notatkaDoZapisania)
         {
-            
+            try
+            {
+                File.Delete(noteToOverwrite);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Nie udało się skasować poprzedniej wersji." + e.Message,"",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                return false;
+            }
+
+            if (!Note.CreateNewAndSerialize(notatkaDoZapisania, sciezkaDoFolderuZNotatkami))
+            {
+                MessageBox.Show("Nie udało się zapisać zmian!", "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
         }
 
-       }
+        public static bool DeleteNote(string noteToDelete)
+        {
+            try
+            {
+                File.Delete(noteToDelete);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Nie udało się skasować notatki." + e.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
+        }
+    }
 }

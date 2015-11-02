@@ -1,61 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
-using System.Runtime.Serialization;
 
 namespace Notki
 {
-    
-    public partial class Nowa : Form
+    public partial class NewNote : Form
     {
-        private byte ustawionaWaznosc = 5;
-        private bool czyTextZmieniony = false;
-        private readonly string sciezkaDoNotatek;
-        
+        private byte setPriority = 5;
+        private bool isTextChanged = false;
+        private readonly string pathToNotes;
 
-        public Nowa(string dokumenty)
+        public NewNote(string documents)
         {
             InitializeComponent();
-            sciezkaDoNotatek = dokumenty;
+            this.pathToNotes = documents;
         }
 
-        private bool czyWypelnione()
+        private bool isFilled()
         {
-            if ((textBoxTytul.Text == "") || (textBoxTresc.Text == ""))
+            if ((textBoxTitle.Text == "") || (textBoxText.Text == ""))
             {
                 MessageBox.Show("Nie wszystkie pola zostały wypełnione!", "Błąd", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 return false;
             }
             return true;
-            
         }
 
-        private void pobierzPriorytet(object sender, EventArgs e)
+        private void getPriority(object sender, EventArgs e)
         {
-            ustawionaWaznosc = ((RadioButton) sender).Checked ? Convert.ToByte(((RadioButton) sender).Text) : (byte)5;
+            if (!(sender is RadioButton)) return;
+
+            if ((sender as RadioButton).Checked)
+                setPriority = Convert.ToByte((sender as RadioButton).Text);
+            else
+                setPriority = (byte)5;
         }
    
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            if (!czyWypelnione()) return;
+            if (!isFilled()) return;
             
-            Notatka nowaNotatka = new Notatka()
+            Note newNote = new Note()
             {
-                DataUtworzenia = DateTime.Now,
-                Waznosc = ustawionaWaznosc,
-                Tytul = textBoxTytul.Text,
-                Wiadomosc = textBoxTresc.Text
+                DateOfCreation = DateTime.Now,
+                Priority = setPriority,
+                Title = textBoxTitle.Text,
+                Text = textBoxText.Text
             };
-            bool czySieUdaloutworzyc = Notatka.UtworzNowyPlikSerializuj(nowaNotatka, sciezkaDoNotatek);
-            if (czySieUdaloutworzyc)
+
+            bool isSuccess = Note.CreateNewAndSerialize(newNote, pathToNotes);
+
+            if (isSuccess)
             {
                 MessageBox.Show("Notatka stworzona.","Sukces",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 this.Close();
@@ -64,24 +59,25 @@ namespace Notki
             {
                 MessageBox.Show("Istnieje już notatka o takiej samej nazwie!", "Błąd", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                textBoxTytul.Focus();
+                textBoxTitle.Focus();
             }
         }
 
-        private void textBoxTytul_TextChanged(object sender, EventArgs e)
+        private void textBoxTitle_textChanged(object sender, EventArgs e)
         {
-            czyTextZmieniony = true;
+            isTextChanged = true;
         }
 
-        private void buttonAnuluj_Click(object sender, EventArgs e)
+        private void buttonAbort_click(object sender, EventArgs e)
         {
-            if (czyTextZmieniony)
+            if (isTextChanged)
             {
-                DialogResult pytanie = MessageBox.Show("Czy na pewno chcesz anulować?", this.Text,
+                DialogResult decision = MessageBox.Show("Czy na pewno chcesz anulować?", 
+                    this.Text,
                     MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question);
-                if (pytanie == DialogResult.Yes) Close();
-
+                    MessageBoxIcon.Question
+                );
+                if (decision == DialogResult.Yes) Close();
             }
             else Close();
         }

@@ -29,26 +29,21 @@
         private void InitializeComponent()
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.zapiszZmianyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nowaNotkaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.otwórzWExploratorzeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zamknijToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButtonDModyfikacji = new System.Windows.Forms.RadioButton();
-            this.radioButtonDUtworzenia = new System.Windows.Forms.RadioButton();
-            this.radioButtonWaznosc = new System.Windows.Forms.RadioButton();
-            this.radioButtonTytul = new System.Windows.Forms.RadioButton();
-            this.buttonSortuj = new System.Windows.Forms.Button();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textBoxTresc = new System.Windows.Forms.TextBox();
+            this.textBoxText = new System.Windows.Forms.TextBox();
             this.buttonNew = new System.Windows.Forms.Button();
-            this.buttonZapiszZmiany = new System.Windows.Forms.Button();
+            this.buttonSaveChanges = new System.Windows.Forms.Button();
             this.buttonUsunNotatke = new System.Windows.Forms.Button();
             this.buttonKoniec = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBoxTytul = new System.Windows.Forms.TextBox();
+            this.textBoxTitle = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.radioButton5 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
@@ -66,8 +61,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.zapiszZmianyToolStripMenuItem,
             this.nowaNotkaToolStripMenuItem,
+            this.otwórzWExploratorzeToolStripMenuItem,
             this.zamknijToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -75,29 +70,32 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // zapiszZmianyToolStripMenuItem
-            // 
-            this.zapiszZmianyToolStripMenuItem.Name = "zapiszZmianyToolStripMenuItem";
-            this.zapiszZmianyToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
-            this.zapiszZmianyToolStripMenuItem.Text = "Zapisz zmiany";
-            // 
             // nowaNotkaToolStripMenuItem
             // 
             this.nowaNotkaToolStripMenuItem.Name = "nowaNotkaToolStripMenuItem";
             this.nowaNotkaToolStripMenuItem.Size = new System.Drawing.Size(83, 20);
             this.nowaNotkaToolStripMenuItem.Text = "Nowa notka";
+            this.nowaNotkaToolStripMenuItem.Click += new System.EventHandler(this.buttonNew_Click);
+            // 
+            // otwórzWExploratorzeToolStripMenuItem
+            // 
+            this.otwórzWExploratorzeToolStripMenuItem.Name = "otwórzWExploratorzeToolStripMenuItem";
+            this.otwórzWExploratorzeToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.otwórzWExploratorzeToolStripMenuItem.Text = "Explorer";
+            this.otwórzWExploratorzeToolStripMenuItem.Click += new System.EventHandler(this.OpenInExplorerToolStripMenuItem_Click);
             // 
             // zamknijToolStripMenuItem
             // 
             this.zamknijToolStripMenuItem.Name = "zamknijToolStripMenuItem";
             this.zamknijToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
             this.zamknijToolStripMenuItem.Text = "Zamknij";
+            this.zamknijToolStripMenuItem.Click += new System.EventHandler(this.buttonKoniec_Click);
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 489);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 429);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(455, 22);
             this.statusStrip1.SizingGrip = false;
@@ -112,103 +110,45 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.radioButtonDModyfikacji);
-            this.groupBox1.Controls.Add(this.radioButtonDUtworzenia);
-            this.groupBox1.Controls.Add(this.radioButtonWaznosc);
-            this.groupBox1.Controls.Add(this.radioButtonTytul);
-            this.groupBox1.Controls.Add(this.buttonSortuj);
             this.groupBox1.Controls.Add(this.listBox1);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 448);
+            this.groupBox1.Size = new System.Drawing.Size(200, 382);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Lista notatek:";
-            // 
-            // radioButtonDModyfikacji
-            // 
-            this.radioButtonDModyfikacji.AutoSize = true;
-            this.radioButtonDModyfikacji.Location = new System.Drawing.Point(6, 421);
-            this.radioButtonDModyfikacji.Name = "radioButtonDModyfikacji";
-            this.radioButtonDModyfikacji.Size = new System.Drawing.Size(100, 17);
-            this.radioButtonDModyfikacji.TabIndex = 5;
-            this.radioButtonDModyfikacji.TabStop = true;
-            this.radioButtonDModyfikacji.Text = "daty modyfikacji";
-            this.radioButtonDModyfikacji.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonDUtworzenia
-            // 
-            this.radioButtonDUtworzenia.AutoSize = true;
-            this.radioButtonDUtworzenia.Location = new System.Drawing.Point(6, 402);
-            this.radioButtonDUtworzenia.Name = "radioButtonDUtworzenia";
-            this.radioButtonDUtworzenia.Size = new System.Drawing.Size(99, 17);
-            this.radioButtonDUtworzenia.TabIndex = 4;
-            this.radioButtonDUtworzenia.TabStop = true;
-            this.radioButtonDUtworzenia.Text = "daty utworzenia";
-            this.radioButtonDUtworzenia.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonWaznosc
-            // 
-            this.radioButtonWaznosc.AutoSize = true;
-            this.radioButtonWaznosc.Location = new System.Drawing.Point(111, 421);
-            this.radioButtonWaznosc.Name = "radioButtonWaznosc";
-            this.radioButtonWaznosc.Size = new System.Drawing.Size(69, 17);
-            this.radioButtonWaznosc.TabIndex = 3;
-            this.radioButtonWaznosc.TabStop = true;
-            this.radioButtonWaznosc.Text = "ważności";
-            this.radioButtonWaznosc.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonTytul
-            // 
-            this.radioButtonTytul.AutoSize = true;
-            this.radioButtonTytul.Location = new System.Drawing.Point(111, 402);
-            this.radioButtonTytul.Name = "radioButtonTytul";
-            this.radioButtonTytul.Size = new System.Drawing.Size(52, 17);
-            this.radioButtonTytul.TabIndex = 2;
-            this.radioButtonTytul.TabStop = true;
-            this.radioButtonTytul.Text = "tytułu";
-            this.radioButtonTytul.UseVisualStyleBackColor = true;
-            // 
-            // buttonSortuj
-            // 
-            this.buttonSortuj.Location = new System.Drawing.Point(6, 368);
-            this.buttonSortuj.Name = "buttonSortuj";
-            this.buttonSortuj.Size = new System.Drawing.Size(187, 23);
-            this.buttonSortuj.TabIndex = 1;
-            this.buttonSortuj.Text = "Sortuj wg:";
-            this.buttonSortuj.UseVisualStyleBackColor = true;
             // 
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(6, 19);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(188, 342);
+            this.listBox1.Size = new System.Drawing.Size(188, 355);
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.textBoxTresc);
+            this.groupBox2.Controls.Add(this.textBoxText);
             this.groupBox2.Location = new System.Drawing.Point(220, 79);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(223, 207);
+            this.groupBox2.Size = new System.Drawing.Size(223, 147);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Treść:";
             // 
             // textBoxTresc
             // 
-            this.textBoxTresc.Location = new System.Drawing.Point(6, 19);
-            this.textBoxTresc.Multiline = true;
-            this.textBoxTresc.Name = "textBoxTresc";
-            this.textBoxTresc.Size = new System.Drawing.Size(211, 182);
-            this.textBoxTresc.TabIndex = 0;
-            this.textBoxTresc.TextChanged += new System.EventHandler(this.textBoxTytul_TextChanged);
+            this.textBoxText.Location = new System.Drawing.Point(6, 19);
+            this.textBoxText.Multiline = true;
+            this.textBoxText.Name = "textBoxTresc";
+            this.textBoxText.Size = new System.Drawing.Size(211, 118);
+            this.textBoxText.TabIndex = 0;
+            this.textBoxText.TextChanged += new System.EventHandler(this.textBoxTytul_TextChanged);
             // 
             // buttonNew
             // 
-            this.buttonNew.Location = new System.Drawing.Point(219, 394);
+            this.buttonNew.Location = new System.Drawing.Point(221, 331);
             this.buttonNew.Name = "buttonNew";
             this.buttonNew.Size = new System.Drawing.Size(107, 40);
             this.buttonNew.TabIndex = 6;
@@ -218,27 +158,28 @@
             // 
             // buttonZapiszZmiany
             // 
-            this.buttonZapiszZmiany.Enabled = false;
-            this.buttonZapiszZmiany.Location = new System.Drawing.Point(218, 348);
-            this.buttonZapiszZmiany.Name = "buttonZapiszZmiany";
-            this.buttonZapiszZmiany.Size = new System.Drawing.Size(224, 40);
-            this.buttonZapiszZmiany.TabIndex = 7;
-            this.buttonZapiszZmiany.Text = "Zapisz zmiany";
-            this.buttonZapiszZmiany.UseVisualStyleBackColor = true;
+            this.buttonSaveChanges.Location = new System.Drawing.Point(220, 285);
+            this.buttonSaveChanges.Name = "buttonZapiszZmiany";
+            this.buttonSaveChanges.Size = new System.Drawing.Size(224, 40);
+            this.buttonSaveChanges.TabIndex = 7;
+            this.buttonSaveChanges.Text = "Zapisz zmiany";
+            this.buttonSaveChanges.UseVisualStyleBackColor = true;
+            this.buttonSaveChanges.Click += new System.EventHandler(this.buttonSaveChanges_Click);
             // 
             // buttonUsunNotatke
             // 
             this.buttonUsunNotatke.Enabled = false;
-            this.buttonUsunNotatke.Location = new System.Drawing.Point(332, 394);
+            this.buttonUsunNotatke.Location = new System.Drawing.Point(334, 331);
             this.buttonUsunNotatke.Name = "buttonUsunNotatke";
             this.buttonUsunNotatke.Size = new System.Drawing.Size(107, 40);
             this.buttonUsunNotatke.TabIndex = 8;
             this.buttonUsunNotatke.Text = "Usuń notatkę";
             this.buttonUsunNotatke.UseVisualStyleBackColor = true;
+            this.buttonUsunNotatke.Click += new System.EventHandler(this.deleteNoteButton_Click);
             // 
             // buttonKoniec
             // 
-            this.buttonKoniec.Location = new System.Drawing.Point(220, 442);
+            this.buttonKoniec.Location = new System.Drawing.Point(222, 379);
             this.buttonKoniec.Name = "buttonKoniec";
             this.buttonKoniec.Size = new System.Drawing.Size(224, 30);
             this.buttonKoniec.TabIndex = 9;
@@ -248,7 +189,7 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.textBoxTytul);
+            this.groupBox3.Controls.Add(this.textBoxTitle);
             this.groupBox3.Location = new System.Drawing.Point(224, 28);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(217, 45);
@@ -258,11 +199,11 @@
             // 
             // textBoxTytul
             // 
-            this.textBoxTytul.Location = new System.Drawing.Point(7, 18);
-            this.textBoxTytul.Name = "textBoxTytul";
-            this.textBoxTytul.Size = new System.Drawing.Size(204, 20);
-            this.textBoxTytul.TabIndex = 0;
-            this.textBoxTytul.TextChanged += new System.EventHandler(this.textBoxTytul_TextChanged);
+            this.textBoxTitle.Location = new System.Drawing.Point(7, 18);
+            this.textBoxTitle.Name = "textBoxTytul";
+            this.textBoxTitle.Size = new System.Drawing.Size(204, 20);
+            this.textBoxTitle.TabIndex = 0;
+            this.textBoxTitle.TextChanged += new System.EventHandler(this.textBoxTytul_TextChanged);
             // 
             // groupBox4
             // 
@@ -271,7 +212,7 @@
             this.groupBox4.Controls.Add(this.radioButton3);
             this.groupBox4.Controls.Add(this.radioButton2);
             this.groupBox4.Controls.Add(this.radioButton1);
-            this.groupBox4.Location = new System.Drawing.Point(220, 293);
+            this.groupBox4.Location = new System.Drawing.Point(221, 232);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(223, 49);
             this.groupBox4.TabIndex = 11;
@@ -345,15 +286,15 @@
             // 
             // Form1
             // 
-            this.AcceptButton = this.buttonZapiszZmiany;
+            this.AcceptButton = this.buttonSaveChanges;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(455, 511);
+            this.ClientSize = new System.Drawing.Size(455, 451);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.buttonKoniec);
             this.Controls.Add(this.buttonUsunNotatke);
-            this.Controls.Add(this.buttonZapiszZmiany);
+            this.Controls.Add(this.buttonSaveChanges);
             this.Controls.Add(this.buttonNew);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -361,8 +302,8 @@
             this.Controls.Add(this.statusStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(471, 550);
-            this.MinimumSize = new System.Drawing.Size(471, 550);
+            this.MaximumSize = new System.Drawing.Size(471, 490);
+            this.MinimumSize = new System.Drawing.Size(471, 490);
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -374,7 +315,6 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -393,19 +333,13 @@
         private System.Windows.Forms.ToolStripMenuItem zamknijToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripMenuItem zapiszZmianyToolStripMenuItem;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TextBox textBoxTresc;
+        private System.Windows.Forms.TextBox textBoxText;
         private System.Windows.Forms.Button buttonNew;
-        private System.Windows.Forms.Button buttonZapiszZmiany;
+        private System.Windows.Forms.Button buttonSaveChanges;
         private System.Windows.Forms.Button buttonUsunNotatke;
         private System.Windows.Forms.Button buttonKoniec;
-        private System.Windows.Forms.RadioButton radioButtonDModyfikacji;
-        private System.Windows.Forms.RadioButton radioButtonDUtworzenia;
-        private System.Windows.Forms.RadioButton radioButtonWaznosc;
-        private System.Windows.Forms.RadioButton radioButtonTytul;
-        private System.Windows.Forms.Button buttonSortuj;
         public System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
@@ -414,7 +348,8 @@
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.TextBox textBoxTytul;
+        private System.Windows.Forms.TextBox textBoxTitle;
+        private System.Windows.Forms.ToolStripMenuItem otwórzWExploratorzeToolStripMenuItem;
     }
 }
 
